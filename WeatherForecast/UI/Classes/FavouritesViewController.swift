@@ -13,10 +13,14 @@ final class FavouritesViewController: UIViewController {
     var weather = [CurrentWeather]() {
         didSet {
             tableView.reloadData()
+            if weather.count >= 20 {
+                addButton.isEnabled = false
+            }
         }
     }
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var addButton: UIBarButtonItem!
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "FavouriteLocationTableViewCell", bundle: nil),

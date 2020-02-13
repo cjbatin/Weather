@@ -15,11 +15,11 @@ protocol WeatherServiceProtocol {
 }
 
 final class WeatherService: WeatherServiceProtocol {
-    private let uri = "https://api.openweathermap.org/data/2.5/weather?APPID=62738a62f4b83eca1f6dbcf4409f2664"
-
+    private let uri = "https://api.openweathermap.org/data/2.5/"
+    private let apiKey = "62738a62f4b83eca1f6dbcf4409f2664"
 
     func getWeatherForCity(name: String, completion: @escaping ((Swift.Result<CurrentWeather, FetchError>) -> Void)) {
-        let fullURI = "\(uri)&q=\(name)"
+        let fullURI = "\(uri)/weather?APPID=\(apiKey)&q=\(name)"
         let request = APIRequester.shared.createRequest(uri: fullURI)
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<CurrentWeather, FetchError>) in
             DispatchQueue.main.async {
@@ -29,7 +29,7 @@ final class WeatherService: WeatherServiceProtocol {
     }
 
     func getWeatherForCity(id: String, completion: @escaping ((Swift.Result<CurrentWeather, FetchError>) -> Void)) {
-        let fullURI = "\(uri)&id=\(id)"
+        let fullURI = "\(uri)/weather?APPID=\(apiKey)&id=\(id)"
         let request = APIRequester.shared.createRequest(uri: fullURI)
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<CurrentWeather, FetchError>) in
             DispatchQueue.main.async {
@@ -39,7 +39,7 @@ final class WeatherService: WeatherServiceProtocol {
     }
 
     func getWeatherForCities(ids: [String], completion: @escaping ((Swift.Result<[CurrentWeather], FetchError>) -> Void)) {
-        var fullURI = "\(uri)&id="
+        var fullURI = "\(uri)/group?APPID=\(apiKey)&&id="
         for id in ids {
             fullURI.append(id)
             fullURI.append(",")
