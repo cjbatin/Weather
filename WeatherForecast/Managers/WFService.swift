@@ -13,11 +13,7 @@ final class WFService {
     private init() { }
 
     private var shouldUseMocks: Bool {
-        #if DEBUG
-        return true
-        #else
         return false
-        #endif
     }
 
     lazy var weatherService: WeatherServiceProtocol = {

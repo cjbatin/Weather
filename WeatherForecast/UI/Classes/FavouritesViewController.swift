@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 final class FavouritesViewController: UIViewController {
     var weather = [CurrentWeather]() {
@@ -25,18 +26,45 @@ final class FavouritesViewController: UIViewController {
     }
 
     private func fetchData() {
-        WFService.shared.weatherService.getWeatherForCities(ids: ["524901","703448","2643743"],
+        let ids = CoreDataStack.fetchIds()
+        if !ids.isEmpty {
+            if ids.count == 1 {
+                fetchCity(id: ids[0])
+            } else {
+                fetchCities(ids: ids)
+            }
+        }
+    }
+    private func fetchCity(id: String) {
+        WFService.shared.weatherService.getWeatherForCity(id: id,
+                                                          completion: { result in
+                                                            switch result {
+                                                            case .success(let weather):
+                                                                self.weather.append(weather)
+                                                            case .failure(let error):
+                                                                self.presentError(error)
+                                                            }
+        })
+    }
+    private func fetchCities(ids: [String]) {
+        WFService.shared.weatherService.getWeatherForCities(ids: ids,
                                                             completion: { result in
             switch result {
             case .success(let weather):
                 self.weather = weather
             case .failure(let error):
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription,
-                                              preferredStyle: .alert)
-                self.present(alert, animated: true, completion: nil)
+                self.presentError(error)
             }
         })
     }
+    private func presentError(_ error: FetchError) {
+        let alert = UIAlertController(title: "Error", message: error.localizedDescription,
+                                      preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+        alert.addAction(okAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+
     @IBAction func addButtonPressed(_ sender: Any) {
         let alertController = UIAlertController(title: "Add Location", message: nil, preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
@@ -52,10 +80,16 @@ final class FavouritesViewController: UIViewController {
                                                               completion: { result in
                 switch result {
                 case .success(let weather):
+                    let newLocation = Locations(context: CoreDataStack.context)
+                    newLocation.id = String(weather.id ?? 0)
+                    newLocation.name = weather.name ?? ""
+                    CoreDataStack.saveContext()
                     self.weather.append(weather)
                 case .failure(let error):
                     let alert = UIAlertController(title: "Error", message: error.localizedDescription,
                                                   preferredStyle: .alert)
+                    let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
+                    alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
                 }
             })

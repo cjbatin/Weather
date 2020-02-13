@@ -29,7 +29,8 @@ final class WeatherService: WeatherServiceProtocol {
     }
 
     func getWeatherForCity(id: String, completion: @escaping ((Swift.Result<CurrentWeather, FetchError>) -> Void)) {
-        let request = APIRequester.shared.createRequest(uri: uri)
+        let fullURI = "\(uri)&id=\(id)"
+        let request = APIRequester.shared.createRequest(uri: fullURI)
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<CurrentWeather, FetchError>) in
             DispatchQueue.main.async {
                 completion(result)
