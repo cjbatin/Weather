@@ -37,6 +37,33 @@ final class FavouritesViewController: UIViewController {
             }
         })
     }
+    @IBAction func addButtonPressed(_ sender: Any) {
+        let alertController = UIAlertController(title: "Add Location", message: nil, preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "City Name"
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let searchAction = UIAlertAction(title: "Search", style: .default, handler: { alert -> Void in
+            guard let firstTextField = alertController.textFields?.first else {
+                assertionFailure("Should have text field")
+                return
+            }
+            WFService.shared.weatherService.getWeatherForCity(name: firstTextField.text ?? "",
+                                                              completion: { result in
+                switch result {
+                case .success(let weather):
+                    self.weather.append(weather)
+                case .failure(let error):
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription,
+                                                  preferredStyle: .alert)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            })
+        })
+        alertController.addAction(cancelAction)
+        alertController.addAction(searchAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
 
 extension FavouritesViewController: UITableViewDataSource {
