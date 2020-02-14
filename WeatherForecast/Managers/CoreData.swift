@@ -37,15 +37,28 @@ class CoreDataStack {
 
     static func fetchIds() -> [String] {
         var ids = [String]()
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Locations")
+        let fetchRequest = NSFetchRequest<Locations>(entityName: "Locations")
         do {
             let results = try context.fetch(fetchRequest)
-            for data in results as? [NSManagedObject] ?? [] {
+            for data in results {
                 ids.append(data.value(forKey: "id") as? String ?? "")
             }
         } catch {
             print("Failed")
         }
         return ids
+    }
+
+    static func delete(id: String) {
+        let fetchRequest = NSFetchRequest<Locations>(entityName: "Locations")
+        fetchRequest.predicate = NSPredicate(format: "id = %@", id)
+        do {
+            let result = try context.fetch(fetchRequest)
+            let objectToDelete = result[0]
+            context.delete(objectToDelete)
+            try context.save()
+        } catch {
+            print(error)
+        }
     }
 }

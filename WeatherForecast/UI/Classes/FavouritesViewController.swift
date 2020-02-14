@@ -26,6 +26,7 @@ final class FavouritesViewController: UIViewController {
         tableView.register(UINib(nibName: "FavouriteLocationTableViewCell", bundle: nil),
                            forCellReuseIdentifier: "favouriteLocationsCell")
         tableView.dataSource = self
+        tableView.delegate = self
         fetchData()
     }
 
@@ -120,5 +121,19 @@ extension FavouritesViewController: UITableViewDataSource {
         }
         cell.configure(with: weather[indexPath.row])
         return cell
+    }
+}
+
+extension FavouritesViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let selectedWeather = weather[indexPath.row]
+            weather.remove(at: indexPath.row)
+            CoreDataStack.delete(id: String(selectedWeather.id ?? 0))
+        }
     }
 }

@@ -20,7 +20,8 @@ final class WeatherService: WeatherServiceProtocol {
 
     func getWeatherForCity(name: String, completion: @escaping ((Swift.Result<CurrentWeather, FetchError>) -> Void)) {
         let fullURI = "\(uri)/weather?APPID=\(apiKey)&q=\(name)"
-        let request = APIRequester.shared.createRequest(uri: fullURI)
+        let escapedAddress = fullURI.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let request = APIRequester.shared.createRequest(uri: escapedAddress ?? "")
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<CurrentWeather, FetchError>) in
             DispatchQueue.main.async {
                 completion(result)
@@ -30,7 +31,8 @@ final class WeatherService: WeatherServiceProtocol {
 
     func getWeatherForCity(id: String, completion: @escaping ((Swift.Result<CurrentWeather, FetchError>) -> Void)) {
         let fullURI = "\(uri)/weather?APPID=\(apiKey)&id=\(id)"
-        let request = APIRequester.shared.createRequest(uri: fullURI)
+        let escapedAddress = fullURI.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let request = APIRequester.shared.createRequest(uri: escapedAddress ?? "")
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<CurrentWeather, FetchError>) in
             DispatchQueue.main.async {
                 completion(result)
@@ -45,7 +47,8 @@ final class WeatherService: WeatherServiceProtocol {
             fullURI.append(",")
         }
         fullURI.removeLast()
-        let request = APIRequester.shared.createRequest(uri: fullURI)
+        let escapedAddress = fullURI.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+        let request = APIRequester.shared.createRequest(uri: escapedAddress ?? "")
         APIRequester.shared.dataTask(urlRequest: request, { (result: Swift.Result<MultiCity<CurrentWeather>, FetchError>) in
             DispatchQueue.main.async {
                 switch result {
