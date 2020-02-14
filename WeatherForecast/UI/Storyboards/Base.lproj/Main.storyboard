@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Favourites View Controller-->
+        <!--Locations-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="FavouritesViewController" customModule="WeatherForecast" customModuleProvider="target" sceneMemberID="viewController">
@@ -29,7 +29,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="zXR-qa-UCR">
+                    <navigationItem key="navigationItem" title="Locations" id="zXR-qa-UCR">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="PxB-xu-wcQ">
                             <connections>
                                 <action selector="addButtonPressed:" destination="BYZ-38-t0r" id="3Le-lU-sIL"/>
@@ -39,7 +39,7 @@
                     <connections>
                         <outlet property="addButton" destination="PxB-xu-wcQ" id="xUD-jx-3rB"/>
                         <outlet property="tableView" destination="gBO-Wp-doP" id="rMM-Hg-eLN"/>
-                        <segue destination="jfh-gJ-iDY" kind="show" identifier="toDetail" id="IJk-QI-7Cw"/>
+                        <segue destination="CKh-xy-Mq4" kind="show" identifier="toDetail" id="fQT-AP-C2Y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -62,21 +62,15 @@
             </objects>
             <point key="canvasLocation" x="-730" y="143"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="e1R-qa-7km">
+        <!--Hosting Controller-->
+        <scene sceneID="i9M-oB-sPD">
             <objects>
-                <viewController id="jfh-gJ-iDY" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="j0h-Lm-L8j">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <viewLayoutGuide key="safeArea" id="XaJ-hF-hZb"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="ENX-sh-IVi"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PGq-2l-k4t" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <hostingController id="CKh-xy-Mq4" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="hhx-Mu-Jnz"/>
+                </hostingController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CMc-3Q-2Gt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="786" y="143"/>
+            <point key="canvasLocation" x="772" y="143"/>
         </scene>
     </scenes>
 </document>

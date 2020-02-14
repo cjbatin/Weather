@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import SwiftUI
 
 final class FavouritesViewController: UIViewController {
     var weather = [CurrentWeather]() {
@@ -20,7 +21,6 @@ final class FavouritesViewController: UIViewController {
     }
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIBarButtonItem!
-
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: "FavouriteLocationTableViewCell", bundle: nil),
@@ -30,6 +30,10 @@ final class FavouritesViewController: UIViewController {
         fetchData()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.separatorColor = .lightGray
+    }
     private func fetchData() {
         let ids = CoreDataStack.fetchIds()
         if !ids.isEmpty {
@@ -103,6 +107,10 @@ final class FavouritesViewController: UIViewController {
         alertController.addAction(searchAction)
         self.present(alertController, animated: true, completion: nil)
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
+    }
 }
 
 extension FavouritesViewController: UITableViewDataSource {
@@ -122,6 +130,10 @@ extension FavouritesViewController: UITableViewDataSource {
         cell.configure(with: weather[indexPath.row])
         return cell
     }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
 }
 
 extension FavouritesViewController: UITableViewDelegate {
@@ -134,6 +146,17 @@ extension FavouritesViewController: UITableViewDelegate {
             let selectedWeather = weather[indexPath.row]
             weather.remove(at: indexPath.row)
             CoreDataStack.delete(id: String(selectedWeather.id ?? 0))
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedWeather = weather[indexPath.row]
+        if selectedWeather.id != nil {
+            let weatherDetailView = WeatherDetailView(currentWeather: selectedWeather)
+            navigationController?.pushViewController(UIHostingController(rootView: weatherDetailView),
+                                                     animated: true)
+        } else {
+            presentError(FetchError.error("Something went wrong sorry!"))
         }
     }
 }
