@@ -32,7 +32,7 @@ final class FavouritesViewModel {
             }
         }
     }
-    private func fetchCity(id: String) {
+    func fetchCity(id: String, _ completion: ((Bool) -> Void)? = nil) {
         WFService.shared.weatherService.getWeatherForCity(id: id,
                                                           completion: { result in
                                                             switch result {
@@ -41,9 +41,10 @@ final class FavouritesViewModel {
                                                             case .failure(let error):
                                                                 self.delegate?.presentError(error.localizedDescription)
                                                             }
+                                                            completion?(true)
         })
     }
-    private func fetchCities(ids: [String]) {
+    func fetchCities(ids: [String], _ completion: ((Bool) -> Void)? = nil) {
         WFService.shared.weatherService.getWeatherForCities(ids: ids,
                                                             completion: { result in
             switch result {
@@ -52,10 +53,11 @@ final class FavouritesViewModel {
             case .failure(let error):
                 self.delegate?.presentError(error.localizedDescription)
             }
+                                                                completion?(true)
         })
     }
 
-    func handleAddCity(name: String) {
+    func handleAddCity(name: String, _ completion: ((Bool) -> Void)? = nil) {
         WFService.shared.weatherService.getWeatherForCity(name: name,
                                                           completion: { result in
             switch result {
@@ -68,6 +70,7 @@ final class FavouritesViewModel {
             case .failure(let error):
                 self.delegate?.presentError(error.localizedDescription)
             }
+                                                            completion?(true)
         })
     }
 }

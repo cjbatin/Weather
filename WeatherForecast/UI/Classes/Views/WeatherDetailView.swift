@@ -32,12 +32,13 @@ struct WeatherDetailView: View {
                     } else {
                         Text("Wind Direction not available")
                     }
-                    VStack {
+                    Spacer()
+                    VStack(alignment: .leading) {
                         Text(viewModel.speed)
                         Text(viewModel.degrees)
                     }
                     Spacer()
-                }
+                }.padding()
             }
             Section(header: Text("Weather")) {
                 VStack(alignment: .leading) {
@@ -51,7 +52,7 @@ struct WeatherDetailView: View {
                         Text("\(viewModel.desc)")
                         Spacer()
                     }
-                }
+                }.padding()
             }
         }
         .navigationBarTitle(Text(viewModel.name))
